@@ -32,7 +32,7 @@ surface_loads = {3: fe.Constant((0., p, 0.)),
                  4: fe.Constant((0., 0., -q))
                  }
 
-body_forces = {1: fe.Constant((0., 7800*9.81, 0.)),
+body_forces = {1: fe.Constant((0., 7800 * 9.81, 0.)),
                }
 
 

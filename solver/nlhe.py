@@ -5,6 +5,8 @@
 
 gmsh pre-processing, petsc solver, paraview post-processing.
 Weak formulation with space varying loads and materials.
+
+TODO: implement checks and tests. Consider paraview scripting.
 """
 
 ############################# MODULE IMPORT ###################################
