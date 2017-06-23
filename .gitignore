@@ -1,3 +1,8 @@
+.idea
+
+mesh
+paraview
+
 *.pyc
 *.xml
 *.msh
