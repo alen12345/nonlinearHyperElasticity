@@ -4,7 +4,4 @@ mesh
 paraview
 
 *.pyc
-*.xml
 *.msh
-*.pvd
-*.vtu

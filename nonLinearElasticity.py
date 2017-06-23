@@ -18,7 +18,9 @@ __status__ = "Development"
 mesh_name = "beam"
 
 # Material properties
-materials = {1: [210e9, 0.33],
+Ey = 210e9
+nu = 0.33
+materials = {1: [Ey, nu],
              }
 
 # Define the boundary conditions
@@ -38,9 +40,10 @@ body_forces = {1: fe.Constant((0., 7800 * 9.81, 0.)),
 
 # Stored strain energy density for a generic model
 def strainDensityFunction(E, Ey, nu):
-    mu = Ey / (2.*(1+nu))
-    lambda_ = Ey*nu / ((1+nu)*(1-2*nu))
-    return lambda_/2.*(fe.tr(E))**2. + mu*fe.tr(E*E)
+    mu = Ey / (2. * (1 + nu))
+    lambda_ = Ey * nu / ((1 + nu) * (1 - 2 * nu))
+    return lambda_ / 2. * (fe.tr(E)) ** 2. + mu * fe.tr(E * E)
+
 
 # Invoke the solver
 nlhe.nonlinearHyperElasticitySolver(mesh_name, materials, boundary_conditions,
