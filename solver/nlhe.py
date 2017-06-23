@@ -40,17 +40,17 @@ def nonlinearHyperElasticitySolver(mesh_name, materials, boundary_conditions,
     cprint("\nMESH PRE-PROCESSING", 'blue', attrs=['bold'])
     # Import mesh and groups
     cprint("Creating gmsh mesh...", 'green')
-    subprocess.check_output("gmsh gmsh/" + mesh_name + ".geo -3", shell=True)
+    subprocess.check_output("gmsh gmsh" + 2*("/" + mesh_name) + ".geo -3", shell=True)
     cprint("Converting mesh to DOLFIN format...", 'green')
-    subprocess.check_output("dolfin-convert gmsh/" + mesh_name +
-                            ".msh mesh/" + mesh_name + ".xml", shell=True)
+    subprocess.check_output("dolfin-convert gmsh" + 2*("/" + mesh_name) +
+                            ".msh mesh" + 2*("/" + mesh_name) + ".xml", shell=True)
     cprint("Importing mesh in FEniCS...", 'green')
-    mesh = fe.Mesh("mesh/" + mesh_name + ".xml")
+    mesh = fe.Mesh("mesh" + 2*("/" + mesh_name) + ".xml")
     cprint("Generating boundaries and subdomains...", 'green')
     subdomains = fe.MeshFunction("size_t", mesh,
-                                 "mesh/" + mesh_name + "_physical_region.xml")
+                                 "mesh" + 2*("/" + mesh_name) + "_physical_region.xml")
     boundaries = fe.MeshFunction("size_t", mesh,
-                                 "mesh/" + mesh_name + "_facet_region.xml")
+                                 "mesh" + 2*("/" + mesh_name) + "_facet_region.xml")
 
     # Redefine the integration measures
     dxp = fe.Measure('dx', domain=mesh, subdomain_data=subdomains)
@@ -158,7 +158,7 @@ def nonlinearHyperElasticitySolver(mesh_name, materials, boundary_conditions,
     cprint("\nSOLUTION POST-PROCESSING", 'blue', attrs=['bold'])
     # Save solution to file in VTK format
     cprint("Saving displacement solution to file...", 'green')
-    uViewer = fe.File("paraview/" + mesh_name + "_displacement.pvd")
+    uViewer = fe.File("paraview" + 2*("/" + mesh_name) + "_displacement.pvd")
     uViewer << u
 
     # Maximum and minimum displacement
@@ -172,21 +172,21 @@ def nonlinearHyperElasticitySolver(mesh_name, materials, boundary_conditions,
     cprint("Computing the deformation tensor and saving to file...", 'green')
     epsilon_u = largeKinematics(u)
     epsilon_u_project = fe.project(epsilon_u, Z)
-    epsilonViewer = fe.File("paraview/" + mesh_name + "_strain.pvd")
+    epsilonViewer = fe.File("paraview" + 2*("/" + mesh_name) + "_strain.pvd")
     epsilonViewer << epsilon_u_project
 
     # Computation of the stresses
     cprint("Stress derivation and saving to file...", 'green')
     S = fe.diff(psi, E)
     S_project = fe.project(S, Z)
-    sigmaViewer = fe.File("paraview/" + mesh_name + "_stress.pvd")
+    sigmaViewer = fe.File("paraview" + 2*("/" + mesh_name) + "_stress.pvd")
     sigmaViewer << S_project
 
     # Computation of an equivalent stress
     s = S - (1./3)*fe.tr(S)*fe.Identity(u.geometric_dimension())
     von_Mises = fe.sqrt(3./2*fe.inner(s, s))
     von_Mises_project = fe.project(von_Mises, W)
-    misesViewer = fe.File("paraview/" + mesh_name + "_mises.pvd")
+    misesViewer = fe.File("paraview" + 2*("/" + mesh_name) + "_mises.pvd")
     misesViewer << von_Mises_project
     print("Maximum equivalent stress:",
           von_Mises_project.vector().array().max())

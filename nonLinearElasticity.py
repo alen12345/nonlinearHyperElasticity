@@ -39,7 +39,7 @@ body_forces = {1: fe.Constant((0., 7800 * 9.81, 0.)),
 
 
 # Stored strain energy density for a generic model
-def strainDensityFunction(E, Ey, nu):
+def strain_density_function(E, Ey, nu):
     mu = Ey / (2. * (1 + nu))
     lambda_ = Ey * nu / ((1 + nu) * (1 - 2 * nu))
     return lambda_ / 2. * (fe.tr(E)) ** 2. + mu * fe.tr(E * E)
@@ -48,4 +48,4 @@ def strainDensityFunction(E, Ey, nu):
 # Invoke the solver
 nlhe.nonlinearHyperElasticitySolver(mesh_name, materials, boundary_conditions,
                                     surface_loads, body_forces,
-                                    strainDensityFunction)
+                                    strain_density_function)
