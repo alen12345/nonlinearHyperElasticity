@@ -5,3 +5,5 @@ paraview
 
 *.pyc
 *.msh
+
+docs/_build
