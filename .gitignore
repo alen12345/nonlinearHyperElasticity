@@ -1,5 +1,9 @@
+.idea
+
+meshes
+paraview
+
 *.pyc
-*.xml
 *.msh
-*.pvd
-*.vtu
+
+docs/_build
