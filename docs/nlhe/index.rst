@@ -2,9 +2,7 @@
 Nonlinear Hyperelasticity in FEniCS
 ====================================
 
-
-..  automodule:: nlhe.solvers.nlhe
-    :members:
+This is a general introduction to the setup of the system to execute the code.
 
 
 ..  toctree::

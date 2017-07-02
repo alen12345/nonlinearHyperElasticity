@@ -40,7 +40,9 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.githubpages']
 
-autodoc_default_flags = ['members', 'undoc-members', 'private-members', 'special-members',
+# autodoc_default_flags = ['members', 'undoc-members', 'private-members', 'special-members',
+#                          'inherited-members', 'show-inheritance']
+autodoc_default_flags = ['members', 'undoc-members', 'private-members',
                          'inherited-members', 'show-inheritance']
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -160,7 +162,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'nonLinearElasticity.tex', u'Nonlinear Hyperelasticity Documentation',
+    (master_doc, 'nonLinearElasticity.tex', u'Nonlinear Hyperelasticity Solver Documentation',
      u'Alessio Nava', 'manual'),
 ]
 latex_logo = '_static/watermarkbase.png'
@@ -170,7 +172,7 @@ latex_logo = '_static/watermarkbase.png'
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'nonlinearelasticity', u'Nonlinear Hyperelasticity Documentation',
+    (master_doc, 'nonlinearelasticity', u'Nonlinear Hyperelasticity Solver Documentation',
      [author], 1)
 ]
 
@@ -180,7 +182,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'nonLinearElasticity', u'Nonlinear Hyperelasticity Documentation',
+    (master_doc, 'nonLinearElasticity', u'Nonlinear Hyperelasticity Solver Documentation',
      author, 'nonLinearElasticity', 'Nonlinear hyperelasticity solver written in Python using FEniCS.',
      'Miscellaneous'),
 ]

@@ -8,7 +8,6 @@ from termcolor import cprint
 
 import fenics as fe
 
-# FILE DOCSTRINGS
 __author__ = "Alessio Nava"
 __copyright__ = "2017 Alessio Nava"
 __credits__ = ["Alessio Nava, the FEniCS Team"]
@@ -20,8 +19,8 @@ __status__ = "Development"
 
 
 def nlhe_solver(mesh_name, materials, boundary_conditions,
-                                     surface_loads, body_forces,
-                                     strain_density_function):
+                surface_loads, body_forces,
+                strain_density_function):
     """
     **Nonlinear hyperelasticity solver**, with pre and post capabiltities.
 
@@ -55,17 +54,17 @@ def nlhe_solver(mesh_name, materials, boundary_conditions,
     cprint("\nMESH PRE-PROCESSING", 'blue', attrs=['bold'])
     # Import mesh and groups
     cprint("Creating gmsh mesh...", 'green')
-    subprocess.check_output("gmsh gmsh" + 2 * ("/" + mesh_name) + ".geo -3", shell=True)
+    subprocess.check_output("gmsh nlhe/gmsh" + 2 * ("/" + mesh_name) + ".geo -3", shell=True)
     cprint("Converting mesh to DOLFIN format...", 'green')
-    subprocess.check_output("dolfin-convert gmsh" + 2 * ("/" + mesh_name) +
-                            ".msh mesh" + 2 * ("/" + mesh_name) + ".xml", shell=True)
+    subprocess.check_output("dolfin-convert nlhe/gmsh" + 2 * ("/" + mesh_name) +
+                            ".msh nlhe/meshes" + 2 * ("/" + mesh_name) + ".xml", shell=True)
     cprint("Importing mesh in FEniCS...", 'green')
-    mesh = fe.Mesh("mesh" + 2 * ("/" + mesh_name) + ".xml")
+    mesh = fe.Mesh("nlhe/meshes" + 2 * ("/" + mesh_name) + ".xml")
     cprint("Generating boundaries and subdomains...", 'green')
     subdomains = fe.MeshFunction("size_t", mesh,
-                                 "mesh" + 2 * ("/" + mesh_name) + "_physical_region.xml")
+                                 "nlhe/meshes" + 2 * ("/" + mesh_name) + "_physical_region.xml")
     boundaries = fe.MeshFunction("size_t", mesh,
-                                 "mesh" + 2 * ("/" + mesh_name) + "_facet_region.xml")
+                                 "nlhe/meshes" + 2 * ("/" + mesh_name) + "_facet_region.xml")
 
     # Redefine the integration measures
     dxp = fe.Measure('dx', domain=mesh, subdomain_data=subdomains)
@@ -165,7 +164,7 @@ def nlhe_solver(mesh_name, materials, boundary_conditions,
     cprint("\nSOLUTION POST-PROCESSING", 'blue', attrs=['bold'])
     # Save solution to file in VTK format
     cprint("Saving displacement solution to file...", 'green')
-    uViewer = fe.File("paraview" + 2 * ("/" + mesh_name) + "_displacement.pvd")
+    uViewer = fe.File("nlhe/paraview" + 2 * ("/" + mesh_name) + "_displacement.pvd")
     uViewer << u
 
     # Maximum and minimum displacement
@@ -179,21 +178,21 @@ def nlhe_solver(mesh_name, materials, boundary_conditions,
     cprint("Computing the deformation tensor and saving to file...", 'green')
     epsilon_u = large_kinematics(u)
     epsilon_u_project = fe.project(epsilon_u, Z)
-    epsilon_viewer = fe.File("paraview" + 2 * ("/" + mesh_name) + "_strain.pvd")
+    epsilon_viewer = fe.File("nlhe/paraview" + 2 * ("/" + mesh_name) + "_strain.pvd")
     epsilon_viewer << epsilon_u_project
 
     # Computation of the stresses
     cprint("Stress derivation and saving to file...", 'green')
     S = fe.diff(psi, E)
     S_project = fe.project(S, Z)
-    sigma_viewer = fe.File("paraview" + 2 * ("/" + mesh_name) + "_stress.pvd")
+    sigma_viewer = fe.File("nlhe/paraview" + 2 * ("/" + mesh_name) + "_stress.pvd")
     sigma_viewer << S_project
 
     # Computation of an equivalent stress
     s = S - (1. / 3) * fe.tr(S) * fe.Identity(u.geometric_dimension())
     von_Mises = fe.sqrt(3. / 2 * fe.inner(s, s))
     von_Mises_project = fe.project(von_Mises, W)
-    mises_viewer = fe.File("paraview" + 2 * ("/" + mesh_name) + "_mises.pvd")
+    mises_viewer = fe.File("nlhe/paraview" + 2 * ("/" + mesh_name) + "_mises.pvd")
     mises_viewer << von_Mises_project
     print("Maximum equivalent stress:",
           von_Mises_project.vector().array().max())
