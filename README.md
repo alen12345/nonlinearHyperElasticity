@@ -1,2 +1,2 @@
 # Nonlinear HyperElasticity Solver based on FEniCS
-Description to be written.
+Project to test Fenics capabilities, with sphinx and docs on readthedocs.org for a collaborative solver.
